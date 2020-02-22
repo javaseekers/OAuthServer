@@ -1,39 +1,34 @@
 package com.khatri.repository;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
 
-import com.khatri.model.UserEntity;
+import com.khatri.model.UserEntity2;
+import com.khatri.model.UsersEntity;
 
 @Repository
 public class OAuthDao {
+	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private UsersRepository repo;
 
-	public UserEntity getUserDetails(String username) {
+	public UserEntity2 getUserDetails(String username) {
 		Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
-		String userSQLQuery = "SELECT * FROM USERS WHERE EMAIL=?";
-		List<UserEntity> list = jdbcTemplate.query(userSQLQuery, new String[] { username },
-				(ResultSet rs, int rowNum) -> {
-
-					UserEntity user = new UserEntity();
-					user.setUsername(username);
-					user.setPassword(rs.getString("PASSWORD"));
-					return user;
-				});
-		if (list.size() > 0) {
-			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_SYSTEMADMIN");
+		
+		UsersEntity user = repo.getByEmail(username);
+		UserEntity2 userEntity = new UserEntity2();
+		if(user!=null) {
+			userEntity.setUsername(user.getEmail());
+			userEntity.setPassword(user.getPassword());
+			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getRoleEntity().getRoleName());
 			grantedAuthoritiesList.add(grantedAuthority);
-			list.get(0).setGrantedAuthoritiesList(grantedAuthoritiesList);
-			return list.get(0);
+			userEntity.setGrantedAuthoritiesList(grantedAuthoritiesList);
+			return userEntity;
 		}
 		return null;
 	}

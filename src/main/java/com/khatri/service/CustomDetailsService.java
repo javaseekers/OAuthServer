@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.khatri.model.CustomUser;
-import com.khatri.model.UserEntity;
+import com.khatri.model.UserEntity2;
 import com.khatri.repository.OAuthDao;
 
 @Service
@@ -16,7 +16,7 @@ public class CustomDetailsService implements UserDetailsService {
 
    @Override
    public CustomUser loadUserByUsername(final String username) throws UsernameNotFoundException {
-      UserEntity userEntity = null;
+      UserEntity2 userEntity = null;
       try {
          userEntity = oauthDao.getUserDetails(username);
          CustomUser customUser = new CustomUser(userEntity);

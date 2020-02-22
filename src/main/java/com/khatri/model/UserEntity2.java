@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class UserEntity {
+public class UserEntity2 {
 
 	private String username;
 	private String password;
