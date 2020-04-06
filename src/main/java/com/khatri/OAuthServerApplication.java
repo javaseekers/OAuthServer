@@ -14,6 +14,7 @@ public class OAuthServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OAuthServerApplication.class, args);
+		//commit 1
 	}
 
 }
